@@ -17,4 +17,6 @@ data/chroma/
 
 #test
 test_vector.py
+test_embedding.py
+test_index.py
 
