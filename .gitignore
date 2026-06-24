@@ -16,7 +16,9 @@ data/repos/
 data/chroma/
 
 #test
+test_*.py
 test_vector.py
 test_embedding.py
 test_index.py
+test_rag.py
 
