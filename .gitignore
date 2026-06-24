@@ -15,3 +15,6 @@ wheels/
 data/repos/
 data/chroma/
 
+#test
+test_vector.py
+

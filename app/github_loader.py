@@ -58,3 +58,11 @@ def read_repo_files(repo_path: str, max_files: int = 5):
 
     print(f"[✓] Total files loaded: {len(code_data)}")
     return code_data
+
+def chunk_text(text: str, chunk_size: int = 1000):
+    chunks = []
+
+    for i in range(0, len(text), chunk_size):
+        chunks.append(text[i:i + chunk_size])
+
+    return chunks
