@@ -1,6 +1,7 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+*.pyc
 build/
 dist/
 wheels/
@@ -12,4 +13,5 @@ wheels/
 
 # Repositories cloned for analysis
 data/repos/
+data/chroma/
 
