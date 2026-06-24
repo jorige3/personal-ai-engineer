@@ -31,7 +31,7 @@ def ingest_repo(req: RepoRequest):
 
     files = read_repo_files(repo_path)
 
-    index_repository(
+    index_stats = index_repository(
         repo_path=repo_path,
         repo_name=req.repo_name,
     )
@@ -40,6 +40,8 @@ def ingest_repo(req: RepoRequest):
         "message": "Repo ingested and indexed successfully",
         "repo_name": req.repo_name,
         "files_loaded": len(files),
+        "indexed_chunks": index_stats["indexed_chunks"],
+        "skipped_files": index_stats["skipped_files"],
     }
 
 

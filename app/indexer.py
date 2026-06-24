@@ -63,3 +63,8 @@ def index_repository(repo_path: str, repo_name: str):
         f"[✓] Indexed {total_chunks} chunks | "
         f"Skipped {skipped_files} files"
     )
+    
+    return {
+        "indexed_chunks": total_chunks,
+        "skipped_files": skipped_files,
+    }
