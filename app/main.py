@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from app.embeddings import get_embedding
 from app.github_loader import clone_repo, read_repo_files
+from app.indexer import index_repository
 from app.llm import ask_llm
+from app.vector_store import search_chunks
 
 app = FastAPI(title="Personal AI Engineer")
 
@@ -24,27 +27,42 @@ def home():
 
 @app.post("/ingest-repo")
 def ingest_repo(req: RepoRequest):
-    path = clone_repo(req.repo_url, req.repo_name)
-    files = read_repo_files(path)
+    repo_path = clone_repo(req.repo_url, req.repo_name)
+
+    files = read_repo_files(repo_path)
+
+    index_repository(
+        repo_path=repo_path,
+        repo_name=req.repo_name,
+    )
 
     return {
-        "message": "Repo ingested successfully",
-        "files_loaded": len(files)
+        "message": "Repo ingested and indexed successfully",
+        "repo_name": req.repo_name,
+        "files_loaded": len(files),
     }
 
 
 @app.post("/chat-repo")
 def chat_repo(req: ChatRequest):
-    repo_path = f"data/repos/{req.repo_name}"
-    files = read_repo_files(repo_path)
+    question_embedding = get_embedding(req.question)
 
-    context = "\n\n".join(
-        [f"File: {f['file']}\n{f['content']}" for f in files]
+    results = search_chunks(
+        embedding=question_embedding,
+        n_results=5,
     )
 
-    answer = ask_llm(req.question, context)
+    documents = results.get("documents", [[]])[0]
+
+    context = "\n\n".join(documents)
+
+    answer = ask_llm(
+        question=req.question,
+        context=context,
+    )
 
     return {
         "question": req.question,
-        "answer": answer
+        "answer": answer,
+        "chunks_used": len(documents),
     }
