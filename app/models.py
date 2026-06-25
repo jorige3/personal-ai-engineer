@@ -14,3 +14,8 @@ class ChatRequest(BaseModel):
 class ExplainFileRequest(BaseModel):
     repo_name: str
     file_path: str
+    
+class SearchCodeRequest(BaseModel):
+    repo_name: str
+    query: str
+    n_results: int = 5
