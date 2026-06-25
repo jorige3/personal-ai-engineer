@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 
 from app.embeddings import get_embedding
 from app.github_loader import clone_repo, read_repo_files
@@ -10,21 +9,11 @@ from app.file_reader import read_specific_file
 
 app = FastAPI(title="Personal AI Engineer")
 
-
-class RepoRequest(BaseModel):
-    repo_url: str
-    repo_name: str
-
-
-class ChatRequest(BaseModel):
-    repo_name: str
-    question: str
-    
-    
-class ExplainFileRequest(BaseModel):
-    repo_name: str
-    file_path: str
-
+from app.models import (
+    RepoRequest,
+    ChatRequest,
+    ExplainFileRequest,
+)
 
 @app.get("/")
 def home():
