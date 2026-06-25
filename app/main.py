@@ -55,6 +55,14 @@ def chat_repo(req: ChatRequest):
     )
 
     documents = results.get("documents", [[]])[0]
+    
+    metadatas = results.get("metadatas", [[]])[0]
+
+    sources = list({
+        item.get("file")
+        for item in metadatas
+        if item.get("file")
+    })
 
     context = "\n\n".join(documents)
 
@@ -67,4 +75,5 @@ def chat_repo(req: ChatRequest):
         "question": req.question,
         "answer": answer,
         "chunks_used": len(documents),
+        "sources": sources,
     }
