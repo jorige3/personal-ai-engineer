@@ -55,7 +55,6 @@ def chat_repo(req: ChatRequest):
     )
 
     documents = results.get("documents", [[]])[0]
-    
     metadatas = results.get("metadatas", [[]])[0]
 
     sources = list({
