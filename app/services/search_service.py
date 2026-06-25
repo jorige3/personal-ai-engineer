@@ -27,5 +27,6 @@ def search_code(query: str, n_results: int = 5):
 
     return {
         "query": query,
+        "results_count": len(search_results),
         "results": search_results,
     }
