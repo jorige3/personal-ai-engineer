@@ -6,8 +6,11 @@ from app.indexer import index_repository
 from app.llm import ask_llm
 from app.vector_store import search_chunks
 from app.file_reader import read_specific_file
+from app.routers.health import router as health_router
 
 app = FastAPI(title="Personal AI Engineer")
+
+app.include_router(health_router)
 
 from app.models import (
     RepoRequest,
@@ -19,15 +22,6 @@ from app.models import (
 def home():
     return {"message": "Personal AI Engineer is running 🚀"}
 
-@app.get("/health")
-def health():
-    return {
-        "status": "healthy",
-        "project": "Personal AI Engineer",
-        "version": "0.5.0-dev",
-        "llm": "Ollama",
-        "vector_store": "ChromaDB",
-    }
 
 
 @app.post("/ingest-repo")
