@@ -6,6 +6,7 @@ from app.github_loader import clone_repo, read_repo_files
 from app.indexer import index_repository
 from app.llm import ask_llm
 from app.vector_store import search_chunks
+from app.file_reader import read_specific_file
 
 app = FastAPI(title="Personal AI Engineer")
 
@@ -18,11 +19,26 @@ class RepoRequest(BaseModel):
 class ChatRequest(BaseModel):
     repo_name: str
     question: str
+    
+    
+class ExplainFileRequest(BaseModel):
+    repo_name: str
+    file_path: str
 
 
 @app.get("/")
 def home():
     return {"message": "Personal AI Engineer is running 🚀"}
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy",
+        "project": "Personal AI Engineer",
+        "version": "0.5.0-dev",
+        "llm": "Ollama",
+        "vector_store": "ChromaDB",
+    }
 
 
 @app.post("/ingest-repo")
@@ -76,3 +92,28 @@ def chat_repo(req: ChatRequest):
         "chunks_used": len(documents),
         "sources": sources,
     }
+    
+@app.post("/explain-file")
+def explain_file(req: ExplainFileRequest):
+    content = read_specific_file(
+        repo_name=req.repo_name,
+        file_path=req.file_path,
+    )
+
+    if content is None:
+        return {
+            "error": "File not found",
+            "file_path": req.file_path,
+        }
+
+    answer = ask_llm(
+        question=f"Explain this file: {req.file_path}",
+        context=content[:6000],
+    )
+
+    return {
+        "file": req.file_path,
+        "summary": answer,
+        "sources": [req.file_path],
+    }
+    
