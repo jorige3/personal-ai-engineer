@@ -7,10 +7,13 @@ from app.llm import ask_llm
 from app.vector_store import search_chunks
 from app.file_reader import read_specific_file
 from app.routers.health import router as health_router
+from app.routers.ingest import router as ingest_router
 
 app = FastAPI(title="Personal AI Engineer")
 
 app.include_router(health_router)
+
+app.include_router(ingest_router)
 
 from app.models import (
     RepoRequest,
@@ -22,26 +25,6 @@ from app.models import (
 def home():
     return {"message": "Personal AI Engineer is running 🚀"}
 
-
-
-@app.post("/ingest-repo")
-def ingest_repo(req: RepoRequest):
-    repo_path = clone_repo(req.repo_url, req.repo_name)
-
-    files = read_repo_files(repo_path)
-
-    index_stats = index_repository(
-        repo_path=repo_path,
-        repo_name=req.repo_name,
-    )
-
-    return {
-        "message": "Repo ingested and indexed successfully",
-        "repo_name": req.repo_name,
-        "files_loaded": len(files),
-        "indexed_chunks": index_stats["indexed_chunks"],
-        "skipped_files": index_stats["skipped_files"],
-    }
 
 
 @app.post("/chat-repo")
