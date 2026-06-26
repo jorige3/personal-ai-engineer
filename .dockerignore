@@ -1,0 +1,8 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+data/repos/
+data/chroma/
+data/index_metadata.json
+.env

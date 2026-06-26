@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    container_name: personal-ai-engineer-api
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - LLM_PROVIDER=ollama
+      - OLLAMA_MODEL=qwen2.5-coder:1.5b
+    volumes:
+      - ./data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
