@@ -79,3 +79,41 @@ def get_repo_stats(repo_name: str):
             extensions.most_common(10)
         ),
     }
+    
+def get_repo_files(repo_name: str, max_files: int = 100):
+    repo_path = os.path.join("data", "repos", repo_name)
+
+    if not os.path.exists(repo_path):
+        return {
+            "error": "Repository not found",
+            "repo_name": repo_name,
+        }
+
+    files_list = []
+
+    for root, _, files in os.walk(repo_path):
+        if ".git" in root:
+            continue
+
+        for file in files:
+            full_path = os.path.join(root, file)
+
+            if ".git" in full_path:
+                continue
+
+            relative_path = full_path.replace(repo_path, "").lstrip("/")
+
+            files_list.append(relative_path)
+
+            if len(files_list) >= max_files:
+                return {
+                    "repo_name": repo_name,
+                    "count": len(files_list),
+                    "files": files_list,
+                }
+
+    return {
+        "repo_name": repo_name,
+        "count": len(files_list),
+        "files": files_list,
+    }
