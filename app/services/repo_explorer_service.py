@@ -1,4 +1,5 @@
 import os
+from collections import Counter
 
 
 def get_repo_tree(repo_name: str, max_items: int = 100):
@@ -38,4 +39,43 @@ def get_repo_tree(repo_name: str, max_items: int = 100):
         "repo_name": repo_name,
         "items_count": len(items),
         "tree": items,
+    }
+
+
+def get_repo_stats(repo_name: str):
+    repo_path = os.path.join("data", "repos", repo_name)
+
+    if not os.path.exists(repo_path):
+        return {
+            "error": "Repository not found",
+            "repo_name": repo_name,
+        }
+
+    total_files = 0
+    total_dirs = 0
+    extensions = Counter()
+
+    for root, dirs, files in os.walk(repo_path):
+
+        if ".git" in root:
+            continue
+
+        total_dirs += len(dirs)
+
+        for file in files:
+
+            total_files += 1
+
+            ext = os.path.splitext(file)[1]
+
+            if ext:
+                extensions[ext] += 1
+
+    return {
+        "repo_name": repo_name,
+        "total_files": total_files,
+        "total_directories": total_dirs,
+        "file_extensions": dict(
+            extensions.most_common(10)
+        ),
     }
