@@ -117,3 +117,27 @@ def get_repo_files(repo_name: str, max_files: int = 100):
         "count": len(files_list),
         "files": files_list,
     }
+    
+def get_repo_summary(repo_name: str):
+    stats = get_repo_stats(repo_name)
+
+    if "error" in stats:
+        return stats
+
+    repo_path = os.path.join("data", "repos", repo_name)
+
+    return {
+        "repo_name": repo_name,
+        "total_files": stats["total_files"],
+        "total_directories": stats["total_directories"],
+        "top_extensions": stats["file_extensions"],
+        "readme_exists": os.path.exists(
+            os.path.join(repo_path, "README.md")
+        ),
+        "license_exists": os.path.exists(
+            os.path.join(repo_path, "LICENSE")
+        ),
+        "package_json_exists": os.path.exists(
+            os.path.join(repo_path, "package.json")
+        ),
+    }
