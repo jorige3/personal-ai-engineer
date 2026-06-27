@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "./api/api";
+import IngestForm from "./components/IngestForm";
 
 function App() {
   const [status, setStatus] = useState("Checking...");
@@ -32,6 +33,10 @@ function App() {
           <pre>{error}</pre>
         </>
       )}
+
+      <hr />
+
+      <IngestForm />
     </div>
   );
 }
