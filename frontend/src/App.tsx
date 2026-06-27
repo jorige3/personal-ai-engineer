@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "./api/api";
-import IngestForm from "./components/IngestForm";
 import ChatForm from "./components/ChatForm";
+import IngestForm from "./components/IngestForm";
 import SearchCodeForm from "./components/SearchCodeForm";
 
 function App() {
@@ -12,7 +12,6 @@ function App() {
     api
       .get("/health")
       .then((res) => {
-        console.log("Backend response:", res.data);
         setStatus(res.data.status);
       })
       .catch((err) => {
@@ -22,32 +21,53 @@ function App() {
       });
   }, []);
 
+  const isHealthy = status === "healthy";
+
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>🤖 Personal AI Engineer</h1>
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <main className="mx-auto max-w-6xl px-6 py-8">
+        <section className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">🤖 Personal AI Engineer</h1>
+              <p className="mt-2 text-slate-400">
+                AI-powered repository assistant using FastAPI, Ollama, and ChromaDB.
+              </p>
+            </div>
 
-      <h2>Backend Status</h2>
-      <p>{status}</p>
+            <div
+              className={`rounded-full px-4 py-2 text-sm font-semibold ${
+                isHealthy
+                  ? "bg-emerald-500/20 text-emerald-300"
+                  : "bg-red-500/20 text-red-300"
+              }`}
+            >
+              {isHealthy ? "🟢 Backend Healthy" : "🔴 Backend Offline"}
+            </div>
+          </div>
 
-      {error && (
-        <>
-          <h3>Error</h3>
-          <pre>{error}</pre>
-        </>
-      )}
+          {error && (
+            <div className="mt-4 rounded-xl border border-red-800 bg-red-950 p-4 text-red-200">
+              <p className="font-semibold">Backend Error</p>
+              <pre className="mt-2 whitespace-pre-wrap text-sm">{error}</pre>
+            </div>
+          )}
+        </section>
 
-      <hr />
+        <div className="grid gap-6">
+          <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+            <IngestForm />
+          </section>
 
-      <IngestForm />
+          <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+            <ChatForm />
+          </section>
 
-      <hr />
-
-      <ChatForm />
-
-      <hr />
-
-      <SearchCodeForm />
-      
+          <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+            <SearchCodeForm />
+          </section>
+        </div>
+      </main>
     </div>
   );
 }
