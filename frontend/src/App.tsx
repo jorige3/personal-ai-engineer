@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "./api/api";
 import IngestForm from "./components/IngestForm";
+import ChatForm from "./components/ChatForm";
 
 function App() {
   const [status, setStatus] = useState("Checking...");
@@ -37,6 +38,10 @@ function App() {
       <hr />
 
       <IngestForm />
+
+      <hr />
+
+      <ChatForm />
     </div>
   );
 }
