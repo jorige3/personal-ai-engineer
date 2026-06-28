@@ -4,6 +4,7 @@ import ChatForm from "./components/ChatForm";
 import ExplainFileForm from "./components/ExplainFileForm";
 import IngestForm from "./components/IngestForm";
 import SearchCodeForm from "./components/SearchCodeForm";
+import RepoDashboard from "./components/RepoDashboard";
 
 function App() {
   const [status, setStatus] = useState("Checking...");
@@ -77,6 +78,10 @@ function App() {
 
           <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
             <ExplainFileForm />
+          </section>
+
+          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+            <RepoDashboard />
           </section>
         </div>
       </main>
