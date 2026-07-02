@@ -1,5 +1,8 @@
 import { useState } from "react";
 import api from "../api/api";
+import Button from "./ui/Button";
+import Card from "./ui/Card";
+import Input from "./ui/Input";
 
 type RepoSummary = {
   repo_name: string;
@@ -49,19 +52,18 @@ export default function RepoDashboard() {
         </label>
 
         <div className="mt-1 flex flex-col gap-3 md:flex-row">
-          <input
+          <Input
             value={repoName}
             onChange={(e) => setRepoName(e.target.value)}
-            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 md:max-w-md"
+            className="md:max-w-md"
           />
 
-          <button
+          <Button
             onClick={loadSummary}
             disabled={loading || !repoName}
-            className="rounded-xl bg-cyan-600 px-5 py-2 font-semibold text-white hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Loading..." : "Load Summary"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -74,60 +76,60 @@ export default function RepoDashboard() {
       {summary && (
         <div className="mt-6 grid gap-4">
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <Card>
               <p className="text-sm font-semibold text-slate-500">
                 Total Files
               </p>
               <p className="mt-2 text-3xl font-bold text-slate-900">
                 {summary.total_files}
               </p>
-            </div>
+            </Card>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <Card>
               <p className="text-sm font-semibold text-slate-500">
                 Directories
               </p>
               <p className="mt-2 text-3xl font-bold text-slate-900">
                 {summary.total_directories}
               </p>
-            </div>
+            </Card>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <Card>
               <p className="text-sm font-semibold text-slate-500">
                 Repository
               </p>
               <p className="mt-2 break-words text-xl font-bold text-slate-900">
                 {summary.repo_name}
               </p>
-            </div>
+            </Card>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <Card>
               <p className="text-sm font-semibold text-slate-500">README</p>
               <p className="mt-2 text-xl font-bold">
                 {summary.readme_exists ? "✅ Yes" : "❌ No"}
               </p>
-            </div>
+            </Card>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <Card>
               <p className="text-sm font-semibold text-slate-500">License</p>
               <p className="mt-2 text-xl font-bold">
                 {summary.license_exists ? "✅ Yes" : "❌ No"}
               </p>
-            </div>
+            </Card>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <Card>
               <p className="text-sm font-semibold text-slate-500">
                 package.json
               </p>
               <p className="mt-2 text-xl font-bold">
                 {summary.package_json_exists ? "✅ Yes" : "❌ No"}
               </p>
-            </div>
+            </Card>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <Card>
             <h3 className="font-bold text-slate-900">Top Extensions</h3>
 
             <div className="mt-4 grid gap-2 md:grid-cols-2">
@@ -141,7 +143,7 @@ export default function RepoDashboard() {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>
